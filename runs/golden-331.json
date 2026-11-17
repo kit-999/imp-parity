@@ -1,0 +1,1867 @@
+{
+  "cases": [
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nParis"
+          ]
+        }
+      ],
+      "id": "predict_chat_basic",
+      "prediction": {
+        "answer": "Paris"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Solve the math problem.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\n2 + 2 = 4\n[[ ## answer ## ]]\n4"
+          ]
+        }
+      ],
+      "id": "chain_of_thought_basic",
+      "prediction": {
+        "answer": "4",
+        "reasoning": "2 + 2 = 4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## score ## ]]\n{score}        # note: the value you produce must be a single int value\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Return an answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nSay pong with score seven.\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, then `[[ ## score ## ]]` (must be formatted as a valid Python int), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\npong\n[[ ## score ## ]]\n7"
+          ]
+        }
+      ],
+      "id": "typed_fields_chat",
+      "prediction": {
+        "answer": "pong",
+        "score": 7
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"score\": \"{score}        # note: the value you produce must be a single int value\"\n}\nIn adhering to this structure, your objective is: \n        Return an answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nSay beam with score five.\n\nRespond with a JSON object in the following order of fields: `answer`, then `score` (must be formatted as a valid Python int).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\":\"beam\",\"score\":5}"
+          ]
+        }
+      ],
+      "id": "json_adapter_basic",
+      "prediction": {
+        "answer": "beam",
+        "score": 5
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nNeed the lookup result.\n[[ ## next_tool_name ## ]]\nlookup\n[[ ## next_tool_args ## ]]\n{\"query\":\"capital-france\"}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the lookup result.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nThe lookup result is enough.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the lookup result.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\n[[ ## thought_1 ## ]]\nThe lookup result is enough.\n\n[[ ## tool_name_1 ## ]]\nfinish\n\n[[ ## tool_args_1 ## ]]\n{}\n\n[[ ## observation_1 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nThe lookup observation says Paris.\n[[ ## answer ## ]]\nParis"
+          ]
+        }
+      ],
+      "id": "react_tool_lookup",
+      "prediction": {
+        "answer": "Paris",
+        "reasoning": "The lookup observation says Paris.",
+        "trajectory": {
+          "observation_0": "Paris",
+          "observation_1": "Completed.",
+          "thought_0": "Need the lookup result.",
+          "thought_1": "The lookup result is enough.",
+          "tool_args_0": {
+            "query": "capital-france"
+          },
+          "tool_args_1": {},
+          "tool_name_0": "lookup",
+          "tool_name_1": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {
+            "query": "capital-france"
+          },
+          "result": "Paris",
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'uppercase', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; uppercase; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use tools step by step when external facts must be transformed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) uppercase, whose description is <desc>Uppercase text.</desc>. It takes arguments {'text': {'type': 'string'}}.\n        (3) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nFind France's capital and return it uppercase.\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'uppercase', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nNeed the capital first.\n[[ ## next_tool_name ## ]]\nlookup\n[[ ## next_tool_args ## ]]\n{\"query\":\"capital-france\"}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'uppercase', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; uppercase; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use tools step by step when external facts must be transformed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) uppercase, whose description is <desc>Uppercase text.</desc>. It takes arguments {'text': {'type': 'string'}}.\n        (3) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nFind France's capital and return it uppercase.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the capital first.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'uppercase', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nNeed uppercase formatting.\n[[ ## next_tool_name ## ]]\nuppercase\n[[ ## next_tool_args ## ]]\n{\"text\":\"Paris\"}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'uppercase', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; uppercase; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use tools step by step when external facts must be transformed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) uppercase, whose description is <desc>Uppercase text.</desc>. It takes arguments {'text': {'type': 'string'}}.\n        (3) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nFind France's capital and return it uppercase.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the capital first.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\n[[ ## thought_1 ## ]]\nNeed uppercase formatting.\n\n[[ ## tool_name_1 ## ]]\nuppercase\n\n[[ ## tool_args_1 ## ]]\n{\"text\": \"Paris\"}\n\n[[ ## observation_1 ## ]]\nPARIS\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'uppercase', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nNow finish.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use tools step by step when external facts must be transformed.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nFind France's capital and return it uppercase.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the capital first.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\n[[ ## thought_1 ## ]]\nNeed uppercase formatting.\n\n[[ ## tool_name_1 ## ]]\nuppercase\n\n[[ ## tool_args_1 ## ]]\n{\"text\": \"Paris\"}\n\n[[ ## observation_1 ## ]]\nPARIS\n\n[[ ## thought_2 ## ]]\nNow finish.\n\n[[ ## tool_name_2 ## ]]\nfinish\n\n[[ ## tool_args_2 ## ]]\n{}\n\n[[ ## observation_2 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nLookup returned Paris and uppercase returned PARIS.\n[[ ## answer ## ]]\nPARIS"
+          ]
+        }
+      ],
+      "id": "react_multi_tool_transform",
+      "prediction": {
+        "answer": "PARIS",
+        "reasoning": "Lookup returned Paris and uppercase returned PARIS.",
+        "trajectory": {
+          "observation_0": "Paris",
+          "observation_1": "PARIS",
+          "observation_2": "Completed.",
+          "thought_0": "Need the capital first.",
+          "thought_1": "Need uppercase formatting.",
+          "thought_2": "Now finish.",
+          "tool_args_0": {
+            "query": "capital-france"
+          },
+          "tool_args_1": {
+            "text": "Paris"
+          },
+          "tool_args_2": {},
+          "tool_name_0": "lookup",
+          "tool_name_1": "uppercase",
+          "tool_name_2": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {
+            "query": "capital-france"
+          },
+          "result": "Paris",
+          "tool": "lookup"
+        },
+        {
+          "arguments": {
+            "text": "Paris"
+          },
+          "result": "PARIS",
+          "tool": "uppercase"
+        }
+      ]
+    },
+    {
+      "error": "RuntimeError('fixture response queue exhausted')",
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use lookup only with supported fact keys.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nLook up an unsupported fact.\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nTry the lookup.\n[[ ## next_tool_name ## ]]\nlookup\n[[ ## next_tool_args ## ]]\n{\"query\":\"unknown-fact\"}"
+          ]
+        }
+      ],
+      "id": "react_tool_argument_error",
+      "prediction": null,
+      "remaining_responses": 0,
+      "status": "error",
+      "tool_trace": []
+    },
+    {
+      "error": "AdapterParseError('LM response cannot be serialized to a JSON object.\\n\\nAdapter JSONAdapter failed to parse the LM response. \\n\\nLM Response: [[ ## answer ## ]]\\npartial \\n\\nExpected to find output fields in the LM response: [answer, score] \\n\\n')",
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## score ## ]]\n{score}        # note: the value you produce must be a single int value\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Return answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nThis fixture should fail parsing.\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, then `[[ ## score ## ]]` (must be formatted as a valid Python int), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\npartial"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"score\": \"{score}        # note: the value you produce must be a single int value\"\n}\nIn adhering to this structure, your objective is: \n        Return answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nThis fixture should fail parsing.\n\nRespond with a JSON object in the following order of fields: `answer`, then `score` (must be formatted as a valid Python int).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\npartial"
+          ]
+        }
+      ],
+      "id": "missing_output_error",
+      "prediction": null,
+      "remaining_responses": 0,
+      "status": "error",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `label` (Literal['yes', 'no']):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## label ## ]]\n{label}        # note: the value you produce must exactly match (no extra characters) one of: yes; no\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Classify the statement as yes or no.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs fire hot?\n\nRespond with the corresponding output fields, starting with the field `[[ ## label ## ]]` (must be formatted as a valid Python Literal['yes', 'no']), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## label ## ]]\nyes"
+          ]
+        }
+      ],
+      "id": "enum_literal_chat",
+      "prediction": {
+        "label": "yes"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `tags` (list[str]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"tags\": \"{tags}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"string\\\"}}\"\n}\nIn adhering to this structure, your objective is: \n        Return the tags as a list of strings.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nTag this: beam and elixir.\n\nRespond with a JSON object in the following order of fields: `tags` (must be formatted as a valid Python list[str]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"tags\": [\"beam\", \"elixir\"]}"
+          ]
+        }
+      ],
+      "id": "list_str_field_json",
+      "prediction": {
+        "tags": [
+          "beam",
+          "elixir"
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `scores` (list[int]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"scores\": \"{scores}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"integer\\\"}}\"\n}\nIn adhering to this structure, your objective is: \n        Return the scores as a list of integers.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nThe scores are three and seven.\n\nRespond with a JSON object in the following order of fields: `scores` (must be formatted as a valid Python list[int]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"scores\": [3, 7]}"
+          ]
+        }
+      ],
+      "id": "list_int_field_json",
+      "prediction": {
+        "scores": [
+          3,
+          7
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `meta` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"meta\": \"{meta}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"object\\\", \\\"additionalProperties\\\": true}\"\n}\nIn adhering to this structure, your objective is: \n        Return the metadata as a JSON object.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nKey k has value 1.\n\nRespond with a JSON object in the following order of fields: `meta` (must be formatted as a valid Python dict[str, Any]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"meta\": {\"k\": 1}}"
+          ]
+        }
+      ],
+      "id": "dict_field_json",
+      "prediction": {
+        "meta": {
+          "k": 1
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `tags` (list[str]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## tags ## ]]\n{tags}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"array\", \"items\": {\"type\": \"string\"}}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Return the tags as a list of strings.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nTag this: beam and elixir.\n\nRespond with the corresponding output fields, starting with the field `[[ ## tags ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## tags ## ]]\n[\"beam\", \"elixir\"]\n[[ ## completed ## ]]"
+          ]
+        }
+      ],
+      "id": "list_str_field_chat",
+      "prediction": {
+        "tags": [
+          "beam",
+          "elixir"
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `meta` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## meta ## ]]\n{meta}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Return the metadata as a JSON object.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nKey k has value 1.\n\nRespond with the corresponding output fields, starting with the field `[[ ## meta ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## meta ## ]]\n{\"k\": 1}\n[[ ## completed ## ]]"
+          ]
+        }
+      ],
+      "id": "dict_field_chat",
+      "prediction": {
+        "meta": {
+          "k": 1
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nNeed the lookup result.\n[[ ## next_tool_name ## ]]\nlookup\n[[ ## next_tool_args ## ]]\n{\"query\":\"capital-france\"}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['lookup', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: lookup; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) lookup, whose description is <desc>Lookup a fact by query.</desc>. It takes arguments {'query': {'type': 'string'}}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the lookup result.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['lookup', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nThe lookup result is enough.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the lookup tool when external facts are needed.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nNeed the lookup result.\n\n[[ ## tool_name_0 ## ]]\nlookup\n\n[[ ## tool_args_0 ## ]]\n{\"query\": \"capital-france\"}\n\n[[ ## observation_0 ## ]]\nParis\n\n[[ ## thought_1 ## ]]\nThe lookup result is enough.\n\n[[ ## tool_name_1 ## ]]\nfinish\n\n[[ ## tool_args_1 ## ]]\n{}\n\n[[ ## observation_1 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nThe lookup observation says Paris.\n[[ ## answer ## ]]\nParis"
+          ]
+        }
+      ],
+      "id": "react_dspy_tool_lookup",
+      "prediction": {
+        "answer": "Paris",
+        "reasoning": "The lookup observation says Paris.",
+        "trajectory": {
+          "observation_0": "Paris",
+          "observation_1": "Completed.",
+          "thought_0": "Need the lookup result.",
+          "thought_1": "The lookup result is enough.",
+          "tool_args_0": {
+            "query": "capital-france"
+          },
+          "tool_args_1": {},
+          "tool_name_0": "lookup",
+          "tool_name_1": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {
+            "query": "capital-france"
+          },
+          "result": "Paris",
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `flag` (bool):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## flag ## ]]\n{flag}        # note: the value you produce must be True or False\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "This is an example of the task, though some input or output fields are not supplied.\n\n[[ ## question ## ]]\nWhat is unknowable?",
+              "role": "user"
+            },
+            {
+              "content": "[[ ## answer ## ]]\nNone\n\n[[ ## flag ## ]]\nNone\n\n[[ ## completed ## ]]\n",
+              "role": "assistant"
+            },
+            {
+              "content": "This is an example of the task, though some input or output fields are not supplied.\n\n[[ ## question ## ]]\nPartial info?",
+              "role": "user"
+            },
+            {
+              "content": "[[ ## answer ## ]]\nMaybe\n\n[[ ## flag ## ]]\nNot supplied for this particular example.\n\n[[ ## completed ## ]]\n",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs the sky blue?",
+              "role": "user"
+            },
+            {
+              "content": "[[ ## answer ## ]]\nYes\n\n[[ ## flag ## ]]\nTrue\n\n[[ ## completed ## ]]\n",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs grass red?",
+              "role": "user"
+            },
+            {
+              "content": "[[ ## answer ## ]]\nNo\n\n[[ ## flag ## ]]\nFalse\n\n[[ ## completed ## ]]\n",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs fire hot?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, then `[[ ## flag ## ]]` (must be formatted as a valid Python bool), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nYes\n\n[[ ## flag ## ]]\nTrue"
+          ]
+        }
+      ],
+      "id": "demo_history_fidelity_chat",
+      "prediction": {
+        "answer": "Yes",
+        "flag": true
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `flag` (bool):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"flag\": \"{flag}        # note: the value you produce must be True or False\"\n}\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "This is an example of the task, though some input or output fields are not supplied.\n\n[[ ## question ## ]]\nWhat is unknowable?",
+              "role": "user"
+            },
+            {
+              "content": "{\n  \"answer\": null,\n  \"flag\": null\n}",
+              "role": "assistant"
+            },
+            {
+              "content": "This is an example of the task, though some input or output fields are not supplied.\n\n[[ ## question ## ]]\nPartial info?",
+              "role": "user"
+            },
+            {
+              "content": "{\n  \"answer\": \"Maybe\",\n  \"flag\": \"Not supplied for this particular example. \"\n}",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs the sky blue?",
+              "role": "user"
+            },
+            {
+              "content": "{\n  \"answer\": \"Yes\",\n  \"flag\": true\n}",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs grass red?",
+              "role": "user"
+            },
+            {
+              "content": "{\n  \"answer\": \"No\",\n  \"flag\": false\n}",
+              "role": "assistant"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs fire hot?\n\nRespond with a JSON object in the following order of fields: `answer`, then `flag` (must be formatted as a valid Python bool).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\":\"Yes\",\"flag\":true}"
+          ]
+        }
+      ],
+      "id": "demo_history_fidelity_json",
+      "prediction": {
+        "answer": "Yes",
+        "flag": true
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `context` (str): \n2. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## context ## ]]\n{context}\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer using the context passages.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## context ## ]]\n[1] \u00abalpha\u00bb\n[2] \u00abbeta\u00bb\n\n[[ ## question ## ]]\nWhich comes first?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nalpha"
+          ]
+        }
+      ],
+      "id": "tsce_list_on_str_input_multi_chat",
+      "prediction": {
+        "answer": "alpha"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `context` (str): \n2. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## context ## ]]\n{context}\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer using the context passages.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## context ## ]]\n\u00abalpha\u00bb\n\n[[ ## question ## ]]\nWhat is it?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nalpha"
+          ]
+        }
+      ],
+      "id": "tsce_list_on_str_input_single_chat",
+      "prediction": {
+        "answer": "alpha"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `context` (str): \n2. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## context ## ]]\n{context}\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer using the context passages.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## context ## ]]\nN/A\n\n[[ ## question ## ]]\nWhat is it?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nnone"
+          ]
+        }
+      ],
+      "id": "tsce_list_on_str_input_empty_chat",
+      "prediction": {
+        "answer": "none"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Given the fields `question`, produce the fields `answer`.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is the capital of France?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nParis"
+          ]
+        }
+      ],
+      "id": "wrx5_empty_instructions_chat",
+      "prediction": {
+        "answer": "Paris"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer carefully.\n        Then double-check.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\n4"
+          ]
+        }
+      ],
+      "id": "o709_indented_multiline_instructions_chat",
+      "prediction": {
+        "answer": "4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\"\n}\nIn adhering to this structure, your objective is: \n        Answer carefully.\n        Then double-check.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with a JSON object in the following order of fields: `answer`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\":\"4\"}"
+          ]
+        }
+      ],
+      "id": "o709_indented_multiline_instructions_json",
+      "prediction": {
+        "answer": "4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        First line.\n        Second line.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\n4"
+          ]
+        }
+      ],
+      "id": "o709_crlf_instructions_chat",
+      "prediction": {
+        "answer": "4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer.\n        Check.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\n4"
+          ]
+        }
+      ],
+      "id": "o709_tab_continuation_instructions_chat",
+      "prediction": {
+        "answer": "4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        First\n        Second",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\n4"
+          ]
+        }
+      ],
+      "id": "o709_unicode_line_separator_instructions_chat",
+      "prediction": {
+        "answer": "4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `x` (list[list[int]]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"x\": \"{x}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"integer\\\"}}}\"\n}\nIn adhering to this structure, your objective is: \n        Return a list of lists of integers.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nGroup these.\n\nRespond with a JSON object in the following order of fields: `x` (must be formatted as a valid Python list[list[int]]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"x\": [[1, 2], [3]]}"
+          ]
+        }
+      ],
+      "id": "o68oy_nested_array_int_json",
+      "prediction": {
+        "x": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `x` (list[list[str]]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"x\": \"{x}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"string\\\"}}}\"\n}\nIn adhering to this structure, your objective is: \n        Return a list of lists of strings.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nGroup these.\n\nRespond with a JSON object in the following order of fields: `x` (must be formatted as a valid Python list[list[str]]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"x\": [[\"a\", \"b\"], [\"c\"]]}"
+          ]
+        }
+      ],
+      "id": "o68oy_nested_array_str_json",
+      "prediction": {
+        "x": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c"
+          ]
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `items` (list[dict[str, Any]]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"items\": \"{items}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"object\\\", \\\"additionalProperties\\\": true}}\"\n}\nIn adhering to this structure, your objective is: \n        Return a list of objects.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nList the records.\n\nRespond with a JSON object in the following order of fields: `items` (must be formatted as a valid Python list[dict[str, Any]]).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"items\": [{\"k\": 1}]}"
+          ]
+        }
+      ],
+      "id": "p1d5_array_object_json",
+      "prediction": {
+        "items": [
+          {
+            "k": 1
+          }
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['compute', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: compute; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the compute tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) compute, whose description is <desc>Return a computed value.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nCompute the big number.\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['compute', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nCompute it.\n[[ ## next_tool_name ## ]]\ncompute\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['compute', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: compute; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the compute tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) compute, whose description is <desc>Return a computed value.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nCompute the big number.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nCompute it.\n\n[[ ## tool_name_0 ## ]]\ncompute\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\n1000000.0\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['compute', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nThe value is enough.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the compute tool then finish.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nCompute the big number.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nCompute it.\n\n[[ ## tool_name_0 ## ]]\ncompute\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\n1000000.0\n\n[[ ## thought_1 ## ]]\nThe value is enough.\n\n[[ ## tool_name_1 ## ]]\nfinish\n\n[[ ## tool_args_1 ## ]]\n{}\n\n[[ ## observation_1 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nThe compute observation is a large float.\n[[ ## answer ## ]]\nok"
+          ]
+        }
+      ],
+      "id": "h7nw_react_float_observation",
+      "prediction": {
+        "answer": "ok",
+        "reasoning": "The compute observation is a large float.",
+        "trajectory": {
+          "observation_0": 1000000.0,
+          "observation_1": "Completed.",
+          "thought_0": "Compute it.",
+          "thought_1": "The value is enough.",
+          "tool_args_0": {},
+          "tool_args_1": {},
+          "tool_name_0": "compute",
+          "tool_name_1": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {},
+          "result": 1000000.0,
+          "tool": "compute"
+        }
+      ]
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['check', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: check; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the check tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) check, whose description is <desc>Return a boolean.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs it even?\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['check', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nCheck it.\n[[ ## next_tool_name ## ]]\ncheck\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['check', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: check; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the check tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) check, whose description is <desc>Return a boolean.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs it even?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nCheck it.\n\n[[ ## tool_name_0 ## ]]\ncheck\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\nTrue\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['check', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nDone.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the check tool then finish.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nIs it even?\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nCheck it.\n\n[[ ## tool_name_0 ## ]]\ncheck\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\nTrue\n\n[[ ## thought_1 ## ]]\nDone.\n\n[[ ## tool_name_1 ## ]]\nfinish\n\n[[ ## tool_args_1 ## ]]\n{}\n\n[[ ## observation_1 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nThe check observation is a boolean.\n[[ ## answer ## ]]\nyes"
+          ]
+        }
+      ],
+      "id": "h7nw_react_bool_observation",
+      "prediction": {
+        "answer": "yes",
+        "reasoning": "The check observation is a boolean.",
+        "trajectory": {
+          "observation_0": true,
+          "observation_1": "Completed.",
+          "thought_0": "Check it.",
+          "thought_1": "Done.",
+          "tool_args_0": {},
+          "tool_args_1": {},
+          "tool_name_0": "check",
+          "tool_name_1": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {},
+          "result": true,
+          "tool": "check"
+        }
+      ]
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['store', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: store; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the store tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) store, whose description is <desc>Store a value and return nothing.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nStore it.\n\n[[ ## trajectory ## ]]\n\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['store', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nStore it.\n[[ ## next_tool_name ## ]]\nstore\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `next_thought` (str): \n2. `next_tool_name` (Literal['store', 'finish']): \n3. `next_tool_args` (dict[str, Any]):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## next_thought ## ]]\n{next_thought}\n\n[[ ## next_tool_name ## ]]\n{next_tool_name}        # note: the value you produce must exactly match (no extra characters) one of: store; finish\n\n[[ ## next_tool_args ## ]]\n{next_tool_args}        # note: the value you produce must adhere to the JSON schema: {\"type\": \"object\", \"additionalProperties\": true}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the store tool then finish.\n        \n        You are an Agent. In each episode, you will be given the fields `question` as input. And you can see your past trajectory so far.\n        Your goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n        \n        To do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\n        After each tool call, you receive a resulting observation, which gets appended to your trajectory.\n        \n        When writing next_thought, you may reason about the current situation and plan for future steps.\n        When selecting the next_tool_name and its next_tool_args, the tool must be one of:\n        \n        (1) store, whose description is <desc>Store a value and return nothing.</desc>. It takes arguments {}.\n        (2) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\n        When providing `next_tool_args`, the value inside the field must be in JSON format",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nStore it.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nStore it.\n\n[[ ## tool_name_0 ## ]]\nstore\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\nNone\n\nRespond with the corresponding output fields, starting with the field `[[ ## next_thought ## ]]`, then `[[ ## next_tool_name ## ]]` (must be formatted as a valid Python Literal['store', 'finish']), then `[[ ## next_tool_args ## ]]` (must be formatted as a valid Python dict[str, Any]), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## next_thought ## ]]\nDone.\n[[ ## next_tool_name ## ]]\nfinish\n[[ ## next_tool_args ## ]]\n{}"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str): \n2. `trajectory` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## trajectory ## ]]\n{trajectory}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Use the store tool then finish.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nStore it.\n\n[[ ## trajectory ## ]]\n[[ ## thought_0 ## ]]\nStore it.\n\n[[ ## tool_name_0 ## ]]\nstore\n\n[[ ## tool_args_0 ## ]]\n{}\n\n[[ ## observation_0 ## ]]\nNone\n\n[[ ## thought_1 ## ]]\nDone.\n\n[[ ## tool_name_1 ## ]]\nfinish\n\n[[ ## tool_args_1 ## ]]\n{}\n\n[[ ## observation_1 ## ]]\nCompleted.\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## reasoning ## ]]\nThe store observation is empty.\n[[ ## answer ## ]]\ndone"
+          ]
+        }
+      ],
+      "id": "h7nw_react_nil_observation",
+      "prediction": {
+        "answer": "done",
+        "reasoning": "The store observation is empty.",
+        "trajectory": {
+          "observation_0": null,
+          "observation_1": "Completed.",
+          "thought_0": "Store it.",
+          "thought_1": "Done.",
+          "tool_args_0": {},
+          "tool_args_1": {},
+          "tool_name_0": "store",
+          "tool_name_1": "finish"
+        }
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": [
+        {
+          "arguments": {},
+          "result": null,
+          "tool": "store"
+        }
+      ]
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"reasoning\": \"{reasoning}\",\n  \"answer\": \"{answer}\"\n}\nIn adhering to this structure, your objective is: \n        Solve the math problem.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with a JSON object in the following order of fields: `reasoning`, then `answer`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"reasoning\":\"2 + 2 = 4\",\"answer\":\"4\"}"
+          ]
+        }
+      ],
+      "id": "cidk_chain_of_thought_json",
+      "prediction": {
+        "answer": "4",
+        "reasoning": "2 + 2 = 4"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {
+            "response_format": {
+              "type": "json_object"
+            }
+          },
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"score\": \"{score}        # note: the value you produce must be a single int value\"\n}\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nWhat is 2 + 2?\n\nRespond with a JSON object in the following order of fields: `answer`, then `score` (must be formatted as a valid Python int).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\":\"four\",\"score\":4}"
+          ]
+        }
+      ],
+      "id": "ps19_response_format_tier_json",
+      "prediction": {
+        "answer": "four",
+        "score": 4
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {
+            "response_format": {
+              "json_schema": {
+                "name": "DSPyProgramOutputs",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "answer": {
+                      "title": "Answer",
+                      "type": "string"
+                    },
+                    "mood": {
+                      "enum": [
+                        "happy",
+                        "sad"
+                      ],
+                      "title": "Mood",
+                      "type": "string"
+                    },
+                    "tags": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Tags",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "answer",
+                    "tags",
+                    "mood"
+                  ],
+                  "title": "DSPyProgramOutputs",
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            }
+          },
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `tags` (list[str]): \n3. `mood` (Literal['happy', 'sad']):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"tags\": \"{tags}        # note: the value you produce must adhere to the JSON schema: {\\\"type\\\": \\\"array\\\", \\\"items\\\": {\\\"type\\\": \\\"string\\\"}}\",\n  \"mood\": \"{mood}        # note: the value you produce must exactly match (no extra characters) one of: happy; sad\"\n}\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nHow are you?\n\nRespond with a JSON object in the following order of fields: `answer`, then `tags` (must be formatted as a valid Python list[str]), then `mood` (must be formatted as a valid Python Literal['happy', 'sad']).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\":\"doing well\",\"tags\":[\"a\",\"b\"],\"mood\":\"happy\"}"
+          ]
+        }
+      ],
+      "id": "ps19_json_schema_tier_json",
+      "prediction": {
+        "answer": "doing well",
+        "mood": "happy",
+        "tags": [
+          "a",
+          "b"
+        ]
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n<question>\n{question}\n</question>\n\n<answer>\n{answer}\n</answer>\nIn adhering to this structure, your objective is: \n        Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "<question>\nWhat is the capital of France?\n</question>\n\nRespond with the corresponding output fields wrapped in XML tags `<answer>`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "<answer>\nParis\n</answer>"
+          ]
+        }
+      ],
+      "id": "xml_basic",
+      "prediction": {
+        "answer": "Paris"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n<question>\n{question}\n</question>\n\n<answer>\n{answer}\n</answer>\n\n<score>\n{score}        # note: the value you produce must be a single int value\n</score>\nIn adhering to this structure, your objective is: \n        Return an answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "<question>\nSay pong with score seven.\n</question>\n\nRespond with the corresponding output fields wrapped in XML tags `<answer>`, then `<score>`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "<answer>\npong\n</answer>\n\n<score>\n7\n</score>"
+          ]
+        }
+      ],
+      "id": "xml_typed_int",
+      "prediction": {
+        "answer": "pong",
+        "score": 7
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `label` (Literal['yes', 'no']):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n<question>\n{question}\n</question>\n\n<label>\n{label}        # note: the value you produce must exactly match (no extra characters) one of: yes; no\n</label>\nIn adhering to this structure, your objective is: \n        Classify the statement as yes or no.",
+              "role": "system"
+            },
+            {
+              "content": "<question>\nIs fire hot?\n</question>\n\nRespond with the corresponding output fields wrapped in XML tags `<label>`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "<label>\nyes\n</label>"
+          ]
+        }
+      ],
+      "id": "xml_enum_literal",
+      "prediction": {
+        "label": "yes"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `reasoning` (str): \n2. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n<question>\n{question}\n</question>\n\n<reasoning>\n{reasoning}\n</reasoning>\n\n<answer>\n{answer}\n</answer>\nIn adhering to this structure, your objective is: \n        Reason, then answer.",
+              "role": "system"
+            },
+            {
+              "content": "<question>\nWhy is the sky blue?\n</question>\n\nRespond with the corresponding output fields wrapped in XML tags `<reasoning>`, then `<answer>`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "<reasoning>\nSunlight scatters off air molecules, and blue scatters most.\n</reasoning>\n\n<answer>\nRayleigh scattering.\n</answer>"
+          ]
+        }
+      ],
+      "id": "xml_multi_output",
+      "prediction": {
+        "answer": "Rayleigh scattering.",
+        "reasoning": "Sunlight scatters off air molecules, and blue scatters most."
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": "AdapterParseError('Adapter JSONAdapter failed to parse the LM response. \\n\\nLM Response: {\"answer\": \"partial\"} \\n\\nExpected to find output fields in the LM response: [answer, score] \\n\\nActual output fields parsed from the LM response: [answer] \\n\\n')",
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n<question>\n{question}\n</question>\n\n<answer>\n{answer}\n</answer>\n\n<score>\n{score}        # note: the value you produce must be a single int value\n</score>\nIn adhering to this structure, your objective is: \n        Return answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "<question>\nThis fixture should fail parsing.\n</question>\n\nRespond with the corresponding output fields wrapped in XML tags `<answer>`, then `<score>`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "<answer>\npartial\n</answer>"
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str): \n2. `score` (int):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\nInputs will have the following structure:\n\n[[ ## question ## ]]\n{question}\n\nOutputs will be a JSON object with the following fields.\n\n{\n  \"answer\": \"{answer}\",\n  \"score\": \"{score}        # note: the value you produce must be a single int value\"\n}\nIn adhering to this structure, your objective is: \n        Return answer and integer score.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## question ## ]]\nThis fixture should fail parsing.\n\nRespond with a JSON object in the following order of fields: `answer`, then `score` (must be formatted as a valid Python int).",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "{\"answer\": \"partial\"}"
+          ]
+        }
+      ],
+      "id": "xml_missing_output_error",
+      "prediction": null,
+      "remaining_responses": 0,
+      "status": "error",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "You are a helpful assistant that can solve tasks based on user input.\nAs input, you will be provided with:\n1. `question` (str):\nYour outputs must contain:\n1. `answer` (str):\nYou should lay out your outputs in detail so that your answer can be understood by another agent\nSpecific instructions: Answer the question.",
+              "role": "system"
+            },
+            {
+              "content": "This is an example of the task, though some input or output fields are not supplied.\n\nquestion: What is the capital of Italy?",
+              "role": "user"
+            },
+            {
+              "content": "answer: None",
+              "role": "assistant"
+            },
+            {
+              "content": "question: What is the capital of Germany?",
+              "role": "user"
+            },
+            {
+              "content": "answer: Berlin",
+              "role": "assistant"
+            },
+            {
+              "content": "question: What is the capital of France?",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "The answer to the question is Paris, since it is the capital of France."
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `text` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## text ## ]]\n{text}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        The input is a text that should contain all the necessary information to produce the fields `answer`.             Your job is to extract the fields from the text verbatim. Extract precisely the appropriate value (content) for each field.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## text ## ]]\nThe answer to the question is Paris, since it is the capital of France.\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## answer ## ]]\nParis\n\n[[ ## completed ## ]]"
+          ]
+        }
+      ],
+      "id": "two_step_basic",
+      "prediction": {
+        "answer": "Paris"
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    },
+    {
+      "error": null,
+      "history": [
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "You are a helpful assistant that can solve tasks based on user input.\nAs input, you will be provided with:\n1. `question` (str):\nYour outputs must contain:\n1. `count` (int): \n2. `enough` (bool):\nYou should lay out your outputs in detail so that your answer can be understood by another agent\nSpecific instructions: Count the apples and decide if it is enough.",
+              "role": "system"
+            },
+            {
+              "content": "question: How many apples? Is it enough?",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "There are clearly 3 apples and yes it is enough for the recipe."
+          ]
+        },
+        {
+          "kwargs": {},
+          "messages": [
+            {
+              "content": "Your input fields are:\n1. `text` (str):\nYour output fields are:\n1. `count` (int): \n2. `enough` (bool):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## text ## ]]\n{text}\n\n[[ ## count ## ]]\n{count}        # note: the value you produce must be a single int value\n\n[[ ## enough ## ]]\n{enough}        # note: the value you produce must be True or False\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        The input is a text that should contain all the necessary information to produce the fields `count`, `enough`.             Your job is to extract the fields from the text verbatim. Extract precisely the appropriate value (content) for each field.",
+              "role": "system"
+            },
+            {
+              "content": "[[ ## text ## ]]\nThere are clearly 3 apples and yes it is enough for the recipe.\n\nRespond with the corresponding output fields, starting with the field `[[ ## count ## ]]` (must be formatted as a valid Python int), then `[[ ## enough ## ]]` (must be formatted as a valid Python bool), and then ending with the marker for `[[ ## completed ## ]]`.",
+              "role": "user"
+            }
+          ],
+          "model": "fake/golden",
+          "model_type": "chat",
+          "outputs": [
+            "[[ ## count ## ]]\n3\n\n[[ ## enough ## ]]\nTrue\n\n[[ ## completed ## ]]"
+          ]
+        }
+      ],
+      "id": "two_step_typed",
+      "prediction": {
+        "count": 3,
+        "enough": true
+      },
+      "remaining_responses": 0,
+      "status": "ok",
+      "tool_trace": []
+    }
+  ],
+  "dspy_version": "3.3.1",
+  "git_sha": "748317dfa75b27ed387e962d64994c4922f9d8f2",
+  "python": "3.13.14",
+  "runner": "python-dspy-golden-trace",
+  "schema_version": 1
+}
