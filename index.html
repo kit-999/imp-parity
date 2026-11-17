@@ -94,6 +94,9 @@ fixture LM (below) fixes that, and it is how the drift was measured.</li>
 Kestrel's independent estimate, from imp's commit sessions, lands in the same range: 3 to 5 active days for the API alone (imp's
 level C0), 13 to 21 for parity that is also tested against DSPy and through real boundaries (C1 and C2). Both are estimates, and
 their inputs are shown below.</li>
+<li><strong>What this cannot tell you:</strong> how well imp's parts work. Nothing here ran imp or called a real model: the
+golden traces replay recorded answers, so they show what DSPy changed, not whether either library does well on a live task.
+That needs its own test; the limits are listed under "What this does not show".</li>
 </ul>
 </section>
 
