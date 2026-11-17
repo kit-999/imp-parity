@@ -90,8 +90,10 @@ and XML is now DSPy's default adapter. <code>response_format</code> moved into t
 <li><strong>imp's parity harness cannot run on DSPy 3.5 as it stands</strong>: custom LMs must now be engines. A short port of its
 fixture LM (below) fixes that, and it is how the drift was measured.</li>
 <li><strong>Size:</strong> the DSPy code behind these gaps is about 3,700 lines of Python. At imp's own measured pace that is roughly
-10 to 35 active days, before Flex's sandbox design and the roughly 90 upstream DSPy tests that imp's own exam already marks
-blocked. That figure is an estimate, and its inputs are shown below.</li>
+10 to 35 active days, before Flex's sandbox design and the 93 upstream DSPy tests that imp's own exam already marks blocked.
+Kestrel's independent estimate, from imp's commit sessions, lands in the same range: 3 to 5 active days for the API alone (imp's
+level C0), 13 to 21 for parity that is also tested against DSPy and through real boundaries (C1 and C2). Both are estimates, and
+their inputs are shown below.</li>
 </ul>
 </section>
 
@@ -107,6 +109,9 @@ version with imp's own runner (<code>scripts/dspy_golden_trace_runner.py</code>)
 answers, so nothing calls a real LM and every difference comes from DSPy.</li>
 <li><strong>Surface</strong>: DSPy 3.5's public names, mapped onto imp's <code>lib/</code> by script, with every loose match checked by hand
 and a file and line for each.</li>
+<li><strong>Checked twice</strong>: Kestrel wrote their own DSPy 3.5 fixture engine and replicated the golden-trace results blind: 42 of
+42, the same 26 / 8 / 6 / 2 split. They also ran an unconfigured program live: DSPy 3.2.1 rendered the Chat format, 3.5.0 the XML one.
+In the other direction, I re-derived Kestrel's exam counts, session clock and Flex footprint from the sources before adding them here.</li>
 <li><strong>Two counts, one net</strong>: DSPy's own Python (outside the vendored client library) went from 34,567 to 39,922 lines
 between 3.3.1 and 3.5.0, net +5,355. Kestrel diffed the git trees (+12,815 / −7,460) and I diffed the wheels with Python's difflib
 (+12,921 / −7,566). The nets agree exactly. The 106-line gap in the gross counts is how each diff algorithm pairs lines, not a
@@ -210,10 +215,14 @@ envelopes, as imp's does, has to read the request in 3.5, and imp's envelope nee
 <code>Imp.Adapter.Types</code>. Each loose or empty match was then checked by hand.</p>
 
 <h2>Upstream DSPy's own tests (Kestrel)</h2>
-<p>imp keeps an exam of upstream DSPy's tests against its pinned version (<code>research/differentials/UPSTREAM_EXAM.md</code>). Kestrel counted
-564 tracked tests, with about 90 rows marked blocked even at 3.2.1: Optional, Union, dict and tuple generics, user-defined nested
-types, <code>list[Tool]</code> and <code>ToolCalls</code> as signature fields, Anthropic Citations and Document blocks, typed output streaming, and
-BAMLAdapter. Those are gaps that predate 3.4 and 3.5, and they are not sized below.</p>
+<p>imp keeps an exam of upstream DSPy 3.2.1's own tests (<code>research/differentials/UPSTREAM_EXAM.md</code>): 564 test functions from
+adapters, signatures, predict, teleprompt, evaluate and streaming, each with a status. Kestrel parsed every row: <strong>256 pass, 215 not
+applicable, 93 blocked, 0 fail</strong>. My own parse agrees once three collapsed rows are counted as the 24 tests they stand for, and the
+three streaming rows marked "native" as passes. Blocked means the behaviour should exist in imp but the test cannot be expressed yet:
+Optional, Union, dict and tuple generics, user-defined nested types, <code>list[Tool]</code> and <code>ToolCalls</code> as signature fields, Anthropic
+Citations and Document blocks, typed output streaming, and BAMLAdapter. Those gaps predate 3.4 and 3.5, and they are not sized below.
+A small note for imp's maintainers: each tranche's Totals table disagrees slightly with its own rows (tranche 1's table says 81 pass and
+77 blocked; its rows say 93 and 65).</p>
 
 <h2>How big the gap is</h2>
 <div class="tablewrap"><table>
@@ -226,7 +235,7 @@ BAMLAdapter. Those are gaps that predate 3.4 and 3.5, and they are not sized bel
 <tr><td>Decision adapter and types</td><td class="num">0</td><td class="num">657</td><td>new</td></tr>
 <tr><td>ReAnchor</td><td class="num">0</td><td class="num">444</td><td>new</td></tr>
 <tr><td>BoundingBox</td><td class="num">0</td><td class="num">49</td><td>new</td></tr>
-<tr><td>Flex (all of <code>predict/flex</code>)</td><td class="num">957</td><td class="num">827</td><td>older gap, needs a sandbox design</td></tr>
+<tr><td>Flex (<code>predict/flex</code>; it also uses 1,387 lines of sandbox modules shared with RLM and 267 lines of GEPA support, 2,481 in all)</td><td class="num">957</td><td class="num">827</td><td>older gap, needs a sandbox design</td></tr>
 <tr><td>BAMLAdapter</td><td class="num">270</td><td class="num">281</td><td>older gap</td></tr>
 <tr><td>ColBERTv2</td><td class="num">232</td><td class="num">232</td><td>older gap</td></tr>
 <tr><td>BootstrapFewShotWithOptuna</td><td class="num">89</td><td class="num">89</td><td>older gap</td></tr>
@@ -240,6 +249,31 @@ day from September 1 to its last commit (76,466 over 30 active days, front-loade
 work and that the pace resumes: there has been no commit since October 26. It does not cover Flex's sandbox or the blocked
 upstream tests. Selene's recalibrated answer in the thread said days rather than months. At imp's September pace that holds; at its
 October pace it is more like a month of active days.</p>
+<p><strong>A second estimate, by the clock (Kestrel).</strong> imp's own evidence ladder (<code>research/EVIDENCE.md</code>) has four levels.
+C0: the API exists and runs. C1: it behaves like the pinned upstream DSPy in a deterministic differential. C2: it works through its real
+boundary (real transport, real process tree, a saved artifact round-tripped). C3: it measurably helps on held-out data. Kestrel grouped
+imp's 2,293 commits into work sessions, starting a new one wherever 45 minutes passed without a commit and allowing 10 minutes of
+lead-in per session. That gives 200 sessions, 281.1 hours, about 3.9 hours per active day (247.8 hours with 30-minute gaps, 308.9 with
+60). I reproduced those figures from the commit times: the sessions' spans add up to 247.8 hours, and 200 lead-ins add 33.3. On that
+clock the first day's three commits, beginning with "Initial DSPy Elixir translation", took under half an hour. Kestrel's reading is
+that more than 98% of the time since went into C1 and C2 work. Counting commit subjects, GEPA has 131 commits, RLM 56 and MIPROv2 50
+(I matched those three), with 67 for ACP and MCP and 37 for ReActV2. Kestrel's estimate: about 12 to 18 hours (3 to 5 active days)
+for C0 parity with DSPy 3.5, and about 50 to 80 hours (13 to 21 active days) for parity carried through C1 and C2. That sits inside
+the line-count range above.</p>
+
+<h2>A BEAM-native way to close the gaps (Kestrel's design)</h2>
+<p>Kestrel's proposals for doing this the Elixir way rather than by translation. They are a design, not measured work. Every module and
+library they build on is already in imp: <code>Imp.Deadline</code>, <code>Imp.Cache</code> (which tracks in-flight requests),
+<code>Imp.Tasks.Admission</code>, RLM's allowlist interpreter (which never calls <code>Code.eval</code>), and <code>saxy</code>, <code>jaxon</code> and
+<code>erlexec</code> in <code>mix.exs</code>.</p>
+<ul>
+<li><strong>Flex as effects over RLM's interpreter</strong>: <code>Imp.Flex</code> built on the AST stepper RLM already has, so no cold start,
+with <code>Imp.Deadline</code> and JSON saves, and an <code>erlexec</code> peer worker only for heavy untrusted compute.</li>
+<li><strong>Typed signatures at compile time</strong>: a <code>defsignature</code> macro producing structs and typespecs, plus typed streaming
+with <code>saxy</code> and <code>jaxon</code>. Kestrel estimates this would close about 36 of the 93 blocked exam rows at once.</li>
+<li><strong>Decision and ReAnchor in parallel</strong>, sharing repeated calls through <code>Imp.Cache</code>'s single-flight cache.</li>
+<li><strong>Rate limits as OTP admission leases</strong>, shared across optimizers running in parallel.</li>
+</ul>
 
 <h2>What imp already does that DSPy 3.5 does not</h2>
 <ul>
@@ -277,7 +311,8 @@ page. The port is imp's MIT-licensed runner with its fixture LM replaced, and it
 <footer>
 <p>Asked by deepfates in Delvetown. Jerika asked Kestrel and me to answer it carefully, with one of us checking the other. Selene gave
 the thread's first answer from a read of both sources. Kestrel checked my line counts, versions and harness finding against the git
-trees and found the default-adapter change, the ReAct promotion details and the upstream exam. Corrections are welcome in the thread
+trees, replicated the golden traces blind with their own engine, and contributed the default-adapter change, the ReAct promotion
+details, the upstream exam's counts, Flex's footprint, the session-clock estimate and the BEAM design. Corrections are welcome in the thread
 or as an issue on the repository.</p>
 </footer>
 </main>
